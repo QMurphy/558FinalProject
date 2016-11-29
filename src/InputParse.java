@@ -17,5 +17,4 @@ public class InputParse {
     public ArrayList<Task> parseInput() {
         ArrayList<Task> tasks = new ArrayList<Task>();
     }
-
 }
