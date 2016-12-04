@@ -7,6 +7,7 @@ package edu.iastate;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.io.File;
 
@@ -17,27 +18,27 @@ public class InputParser {
         input = i;
     }
 
-    public ArrayList<Task> parseInput() {
-        ArrayList<Task> tasks = new ArrayList<>();
+    public List<Task> parseInput() {
+        List<Task> tasks = new ArrayList<>();
         try {
             Scanner sc = new Scanner(input);
 
-            int numSync = sc.nextInt();
+            int numSync = Integer.parseInt(sc.nextLine());
             for (int i = 0; i < numSync; i++) {
                 String line = sc.nextLine();
-                double compTime = Double.parseDouble(line.substring(0, line.indexOf(" ")));
-                double period = Double.parseDouble(line.substring(line.indexOf(" ") + 1));
+                int compTime = Integer.parseInt(line.substring(0, line.indexOf(" ")));
+                int period = Integer.parseInt(line.substring(line.indexOf(" ") + 1));
                 tasks.add(new Task(i, compTime, period));
             }
 
-            int numAsync = sc.nextInt();
+            int numAsync = Integer.parseInt(sc.nextLine());
             for (int i = 0; i < numAsync; i++) {
                 String line = sc.nextLine();
-                double compTime = Double.parseDouble(line.substring(0, line.indexOf(" ")));
-                double deadline = Double.parseDouble(line.substring(line.indexOf(" ") + 1));
+                int compTime = Integer.parseInt(line.substring(0, line.indexOf(" ")));
 
                 String temp = line.substring(line.indexOf(" ") + 1);
-                double arrivalTime = Double.parseDouble(temp.substring(line.indexOf(" ") + 1));
+                int deadline = Integer.parseInt(temp.substring(0, temp.indexOf(" ")));
+                int arrivalTime = Integer.parseInt(temp.substring(temp.indexOf(" ") + 1));
                 tasks.add(new Task(numSync + i, compTime, deadline, arrivalTime));
             }
         } catch (FileNotFoundException e) {

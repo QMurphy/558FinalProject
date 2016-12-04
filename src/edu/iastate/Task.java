@@ -9,19 +9,19 @@ public class Task {
 
     private int id;
     private boolean sync; //true = synchronous
-    private double compTime;
-    private double period;
-    private double deadline;
-    private double arrivalTime;
+    private int compTime;
+    private int period;
+    private int deadline;
+    private int arrivalTime;
 
-    public Task(int id, double cT, double p){
+    public Task(int id, int cT, int p){
         this.id = id;
         sync = true;
         compTime = cT;
         period = p;
     }
 
-    public Task(int id, double cT, double d, double aT){
+    public Task(int id, int cT, int d, int aT){
         this.id = id;
         sync = false;
         compTime = cT;
@@ -29,14 +29,13 @@ public class Task {
         arrivalTime = aT;
     }
 
-    public double calcNewTime(FrequencyScaler freqScaler){
-        return 0.0;
+    public int calcNewTime(FrequencyScaler freqScaler){
+        return 0;
     }
 
-    public double calcEnergyUsed(VoltageScaler voltScaler, FrequencyScaler freqScaler){
-        return 0.0;
+    public int calcEnergyUsed(VoltageScaler voltScaler, FrequencyScaler freqScaler){
+        return 0;
     }
-
     /**
      * Getters
      */
@@ -48,19 +47,19 @@ public class Task {
         return sync;
     }
 
-    public double getCompTime(){
+    public int getCompTime(){
         return compTime;
     }
 
-    public double getPeriod(){
+    public int getPeriod(){
         return period;
     }
 
-    public double getDeadline(){
+    public int getDeadline(){
         return deadline;
     }
 
-    public double getArrivalTime(){
+    public int getArrivalTime(){
         return arrivalTime;
     }
 
@@ -75,19 +74,19 @@ public class Task {
         sync = s;
     }
 
-    public void setCompTime(double cT){
+    public void setCompTime(int cT){
         compTime = cT;
     }
 
-    public void setPeriod(double p){
+    public void setPeriod(int p){
         period = p;
     }
 
-    public void setDeadline(double d){
+    public void setDeadline(int d){
         deadline = d;
     }
 
-    public void setArrivalTime(double aT){
+    public void setArrivalTime(int aT){
         arrivalTime = aT;
     }
 }
