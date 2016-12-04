@@ -9,9 +9,21 @@ public class Main {
 
     public static void main(String[] args){
         InputParser ip = new InputParser(new File("input.txt"));
-        //Scheduler s = new Scheduler(new PollingServer());
+        Scheduler s = new Scheduler(new PollingServer());
         List<Task> tasks = ip.parseInput();
 
+        runSchedule(s, tasks);
+        System.out.println("END SCHEDULE 1\n");
+
+        FrequencyScaler f = new FrequencyScaler(.5f);
+        for(Task t : tasks)
+            t.calcNewTime(f);
+
+        runSchedule(s, tasks);
+        System.out.println("END SCHEDULE 2\n");
+    }
+
+    private static void runSchedule(Scheduler s, List<Task> tasks){
         // Admission Controller
         // TODO Change this based on CPU Utilization
         int nextSchedulePoint = 0;
