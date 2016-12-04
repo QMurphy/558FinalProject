@@ -15,12 +15,17 @@ public class Main {
         runSchedule(s, tasks);
         System.out.println("END SCHEDULE 1\n");
 
+        s = new Scheduler(new PollingServer());
         FrequencyScaler f = new FrequencyScaler(.5f);
         for(Task t : tasks)
             t.calcNewTime(f);
 
         runSchedule(s, tasks);
         System.out.println("END SCHEDULE 2\n");
+
+        VoltageScaler v = new VoltageScaler(1.2f);
+        for(Task t : tasks)
+            System.out.println("Task " + t.getID() + ": " + String.format("%.3g", t.calcEnergyUsed(v, f)));
     }
 
     private static void runSchedule(Scheduler s, List<Task> tasks){

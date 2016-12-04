@@ -36,8 +36,8 @@ public class Task {
         return compTime;
     }
 
-    public int calcEnergyUsed(VoltageScaler voltScaler, FrequencyScaler freqScaler){
-        int energy = (int)Math.ceil((Math.sqrt(voltScaler.getCurrentVolt()) * freqScaler.getCurrentFreq()) * compTime);
+    public double calcEnergyUsed(VoltageScaler voltScaler, FrequencyScaler freqScaler){
+        double energy = (Math.sqrt(voltScaler.getCurrentVolt()) * freqScaler.getCurrentFreq()) * compTime;
         return energy;
     }
     /**

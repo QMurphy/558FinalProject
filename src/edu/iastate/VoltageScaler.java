@@ -10,7 +10,7 @@ import java.util.List;
 
 public class VoltageScaler {
      private List<Float> availableVolt = new ArrayList<Float>();
-    private float currentVolt = 0f;
+    private float currentVolt = 1f; //1V default
 
     public VoltageScaler(List<Float> aV, float cV){
         availableVolt = aV;
