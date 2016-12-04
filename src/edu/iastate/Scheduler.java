@@ -1,5 +1,7 @@
 package edu.iastate;
 
+import java.util.ArrayList;
+
 /**
  * Created by qmurp on 12/4/2016.
  */
@@ -13,5 +15,7 @@ public class Scheduler {
 
     }
 
-    
+    ArrayList<History> getHistory() {
+        return null;
+    }
 }

@@ -1,5 +1,7 @@
 package edu.iastate;
 
+import java.util.ArrayList;
+
 /**
  * Created by qmurp on 12/4/2016.
  */
@@ -15,7 +17,7 @@ public class PollingServer implements IAsyncTaskServer {
     }
 
     @Override
-    public Object getHistory() {
+    public ArrayList<History> getHistory() {
         return null;
     }
 }
