@@ -6,9 +6,11 @@ package edu.iastate;
 public class History {
     public int time;
     public Task task;
+    public boolean success;
 
-    public History(int time, Task task) {
+    public History(int time, Task task, boolean success) {
         this.time = time;
         this.task = task;
+        this.success = success;
     }
 }

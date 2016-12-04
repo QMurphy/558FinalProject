@@ -12,10 +12,13 @@ public class Main {
         Scheduler s = new Scheduler(new PollingServer());
         List<Task> tasks = ip.parseInput();
 
+        // Admission Controller
+        // TODO Change this based on CPU Utilization
         int nextSchedulePoint = 0;
         for (int i = 0; i < MAX_TIME; i++) {
             for (Task t : tasks) {
                 if (t.getSync() && i % t.getPeriod() == 0) {
+                    t.setDeadline(i + t.getPeriod());
                     s.addTask(t);
                 }
             }
@@ -24,9 +27,10 @@ public class Main {
             }
         }
 
+        // Results
         List<History> hist = s.getHistory();
         for (History h : hist) {
-            System.out.println(h.time + ": " + h.task.getID());
+            System.out.println("Task " + h.task.getID() + (h.success ? " ran " : " missed ") + "at time " + h.time);
         }
     }
 }

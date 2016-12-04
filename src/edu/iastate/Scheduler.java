@@ -1,6 +1,7 @@
 package edu.iastate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -8,8 +9,6 @@ import java.util.List;
  */
 public class Scheduler {
     private float targetMissRate;
-    private VoltageScaler volt;
-    private FrequencyScaler freq;
     private IAsyncTaskServer taskServer;
     private ArrayList<Task> accepted;
     private ArrayList<History> hist;
@@ -31,6 +30,17 @@ public class Scheduler {
 
     public int schedule(int curTime) {
         if (accepted.size() > 0) {
+            // Check for missed deadlines
+            for (int i = 0; i < accepted.size(); i++) {
+                Task t = accepted.get(i);
+                if (t.getDeadline() - t.getCompTime() < curTime) {
+                    accepted.remove(t);
+                    i--;
+                    hist.add(new History(curTime, t, false));
+                }
+            }
+
+            // Find next schedulable task
             Task scheduled = accepted.get(0);
             for (Task t : accepted) {
                 if (scheduled.getDeadline() > t.getDeadline()) {
@@ -38,15 +48,10 @@ public class Scheduler {
                 }
             }
             accepted.remove(scheduled);
-            hist.add(new History(curTime, scheduled));
+            hist.add(new History(curTime, scheduled, true));
             return curTime + scheduled.getCompTime();
         }
         return curTime;
-    }
-
-    private float pidController(float curMissRate) {
-        float cpuUtil = 0.0f;
-        return cpuUtil;
     }
 
     public List<History> getHistory() {
