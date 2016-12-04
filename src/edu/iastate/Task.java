@@ -9,6 +9,7 @@ public class Task {
 
     private int id;
     private boolean sync; //true = synchronous
+    private int originalCompTime; //assuming default 1MHz frequency
     private int compTime;
     private int period;
     private int deadline;
@@ -17,24 +18,27 @@ public class Task {
     public Task(int id, int cT, int p){
         this.id = id;
         sync = true;
-        compTime = cT;
+        originalCompTime = cT;
         period = p;
     }
 
     public Task(int id, int cT, int d, int aT){
         this.id = id;
         sync = false;
-        compTime = cT;
+        originalCompTime = cT;
         deadline = d;
         arrivalTime = aT;
     }
 
+    //calculate new computation time
     public int calcNewTime(FrequencyScaler freqScaler){
-        return 0;
+        compTime = (int)Math.ceil(originalCompTime/freqScaler.getCurrentFreq());
+        return compTime;
     }
 
     public int calcEnergyUsed(VoltageScaler voltScaler, FrequencyScaler freqScaler){
-        return 0;
+        int energy = (int)Math.ceil((Math.sqrt(voltScaler.getCurrentVolt()) * freqScaler.getCurrentFreq()) * compTime);
+        return energy;
     }
     /**
      * Getters
