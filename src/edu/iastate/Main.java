@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args){
         InputParser ip = new InputParser(new File("input.txt"));
-        Scheduler s = new Scheduler(new PollingServer());
+        //Scheduler s = new Scheduler(new PollingServer());
         List<Task> tasks = ip.parseInput();
 
         // Admission Controller
