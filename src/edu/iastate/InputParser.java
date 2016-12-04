@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 
-public class InputParse {
+public class InputParser {
     private File input;
 
-    public InputParse(File i){
+    public InputParser(File i){
         input = i;
     }
 
