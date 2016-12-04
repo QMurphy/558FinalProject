@@ -14,12 +14,26 @@ public class Task {
     private int period;
     private int deadline;
     private int arrivalTime;
+    private int compTimeLeft;
 
     public Task(int id, int cT, int p){
         this.id = id;
         sync = true;
         originalCompTime = cT;
         period = p;
+        compTime = cT;
+        compTimeLeft = compTime;
+    }
+
+    public void reset() {
+        compTimeLeft = compTime;
+    }
+
+    public boolean work() {
+        if (compTimeLeft > 0) {
+            compTimeLeft--;
+        }
+        return compTimeLeft == 0;
     }
 
     public Task(int id, int cT, int d, int aT){
@@ -28,11 +42,14 @@ public class Task {
         originalCompTime = cT;
         deadline = d;
         arrivalTime = aT;
+        compTime = cT;
+        compTimeLeft = compTime;
     }
 
     //calculate new computation time
     public int calcNewTime(FrequencyScaler freqScaler){
         compTime = (int)Math.ceil(originalCompTime/freqScaler.getCurrentFreq());
+        compTimeLeft = (int)Math.ceil(compTimeLeft/freqScaler.getCurrentFreq());
         return compTime;
     }
 
