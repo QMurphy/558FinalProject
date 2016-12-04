@@ -3,6 +3,8 @@
  * Date: 11/28/16
  * Author: Colin Ward
  */
-public class VoltageScaler {
+package edu.iastate;
+
+public class FrequencyScaler {
 
 }

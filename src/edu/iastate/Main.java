@@ -1,3 +1,5 @@
+package edu.iastate;
+
 //Just making this for testing so far
 public class Main {
 

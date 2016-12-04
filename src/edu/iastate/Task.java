@@ -3,6 +3,8 @@
  * Date: 11/28/16
  * Author: Colin Ward
  */
+package edu.iastate;
+
 public class Task {
 
     private int id;
@@ -28,11 +30,11 @@ public class Task {
     }
 
     public double calcNewTime(FrequencyScaler freqScaler){
-
+        return 0.0;
     }
 
     public double calcEnergyUsed(VoltageScaler voltScaler, FrequencyScaler freqScaler){
-
+        return 0.0;
     }
 
     /**
