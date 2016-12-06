@@ -8,15 +8,17 @@ import java.util.List;
  * Created by qmurp on 12/4/2016.
  */
 public class Scheduler {
-    // TODO Determine Preemption and log it in history
-
     private float targetMissRate;
     private ArrayList<Task> accepted;
     private ArrayList<History> hist;
+    private int lastID;
+    private boolean lastFinished;
 
     public Scheduler() {
         accepted = new ArrayList<>();
         hist = new ArrayList<>();
+        lastID = -1;
+        lastFinished = true;
     }
 
     public void addTask(Task t) {
@@ -48,11 +50,26 @@ public class Scheduler {
                 }
             }
 
+            // Check if we're preempting
+            // If the last task is different from this one and the last task didn't finish its run, there was a preemption
+            if (scheduled.getID() != lastID && lastFinished == false) {
+                hist.add(new History(curTime, scheduled, History.Event.PREEMPTION));
+            }
+
             // Work on the task and remove it if it finishes
             if (scheduled.work()) {
                 accepted.remove(scheduled);
                 hist.add(new History(curTime, scheduled, History.Event.HIT));
             }
+
+            // Update preemption detection variables
+            if (scheduled.getCompTimeLeft() == 0) {
+                lastFinished = true;
+            }
+            else {
+                lastFinished = false;
+            }
+            lastID = scheduled.getID();
         }
     }
 

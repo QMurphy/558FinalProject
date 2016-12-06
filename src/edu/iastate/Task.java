@@ -72,6 +72,10 @@ public class Task {
         return compTime;
     }
 
+    public int getCompTimeLeft(){
+        return compTimeLeft;
+    }
+
     public int getPeriod(){
         return period;
     }
