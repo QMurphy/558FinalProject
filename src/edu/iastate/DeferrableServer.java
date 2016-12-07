@@ -8,37 +8,12 @@ import java.util.List;
  * This server has a set amount of time that it can assign async tasks to per call
  * but
  */
-public class DeferrableServer implements IAsyncTaskServer {
-    private int runTime;
-    private int timeUsed;
-    private int period;
-    private int lastRefresh;
-    private ArrayList<Task> tasks;
-
+public class DeferrableServer extends AsyncTaskServer {
     public DeferrableServer(int runTime, int period) {
         this.runTime = runTime;
         tasks = new ArrayList<>();
         this.period = period;
         lastRefresh = 0;
-    }
-
-    @Override
-    public void refresh() {
-        timeUsed = 0;
-    }
-
-    @Override
-    public boolean canRun() {
-        return timeUsed < runTime;
-    }
-
-    @Override
-    public boolean shouldRefresh(int curTime) {
-        if (lastRefresh / period < curTime / period) {
-            lastRefresh = curTime;
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -67,10 +42,5 @@ public class DeferrableServer implements IAsyncTaskServer {
             }
         }
         return ret;
-    }
-
-    @Override
-    public void addTask(Task t) {
-        tasks.add(t);
     }
 }

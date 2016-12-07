@@ -7,26 +7,11 @@ import java.util.List;
  * Created by qmurp on 12/4/2016.
  * This server has send any async tasks that come through
  */
-public class NoFilterServer implements IAsyncTaskServer {
-    private ArrayList<Task> tasks;
-
+public class NoFilterServer extends AsyncTaskServer {
     public NoFilterServer() {
         tasks = new ArrayList<>();
-    }
-
-    @Override
-    public void refresh() {
-
-    }
-
-    @Override
-    public boolean canRun() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldRefresh(int curTime) {
-        return false;
+        timeUsed = 0;
+        runTime = 1;
     }
 
     @Override
@@ -44,10 +29,5 @@ public class NoFilterServer implements IAsyncTaskServer {
         ArrayList<Task> ret = new ArrayList<>(tasks);
         tasks = new ArrayList<>();
         return ret;
-    }
-
-    @Override
-    public void addTask(Task t) {
-        tasks.add(t);
     }
 }

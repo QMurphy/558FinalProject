@@ -5,9 +5,12 @@ package edu.iastate;
  */
 public class History {
     public enum Event {
-        HIT,
+        COMPLETE,
         MISS,
-        PREEMPTION
+        PREEMPTION,
+        ARRIVAL,
+        ACCEPTED,
+        DECLINED
     }
 
     public int time;
@@ -22,9 +25,12 @@ public class History {
 
     public static String eventToString(Event e) {
         switch (e) {
-            case HIT: return "Hit";
+            case COMPLETE: return "Completed";
             case MISS: return "Miss";
             case PREEMPTION: return "Preemption";
+            case ARRIVAL: return "Arrived";
+            case ACCEPTED: return "Accepted";
+            case DECLINED: return "Declined";
             default: return "";
         }
     }

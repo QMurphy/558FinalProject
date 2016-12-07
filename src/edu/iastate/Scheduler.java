@@ -1,7 +1,6 @@
 package edu.iastate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ public class Scheduler {
         // Check for missed deadlines
         for (int i = 0; i < accepted.size(); i++) {
             Task t = accepted.get(i);
-            if ((t.getDeadline() + t.getArrivalTime()) - t.getCompTime() < curTime) {
+            if ((t.getDeadline() + t.getArrivalTime()) - t.getCompTimeLeft() < curTime) {
                 accepted.remove(t);
                 i--;
                 hist.add(new History(curTime, t, History.Event.MISS));
@@ -59,7 +58,7 @@ public class Scheduler {
             // Work on the task and remove it if it finishes
             if (scheduled.work()) {
                 accepted.remove(scheduled);
-                hist.add(new History(curTime, scheduled, History.Event.HIT));
+                hist.add(new History(curTime, scheduled, History.Event.COMPLETE));
             }
 
             // Update preemption detection variables
