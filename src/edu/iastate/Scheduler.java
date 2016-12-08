@@ -28,8 +28,13 @@ public class Scheduler {
         accepted.addAll(t);
     }
 
-    public void schedule(int curTime) {
-        // TODO Add preemption
+    public int schedule(int curTime) {
+        // Return if work is being done or not
+        int retVal = 1;
+        if (accepted.size() == 0) {
+            retVal = 0;
+        }
+
         // Check for missed deadlines
         for (int i = 0; i < accepted.size(); i++) {
             Task t = accepted.get(i);
@@ -70,6 +75,8 @@ public class Scheduler {
             }
             lastID = scheduled.getID();
         }
+
+        return retVal;
     }
 
     public List<History> getHistory() {
