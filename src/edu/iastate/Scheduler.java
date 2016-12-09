@@ -13,8 +13,8 @@ public class Scheduler {
     private int lastID;
     private boolean lastFinished;
 
-    public Scheduler() {
-        accepted = new ArrayList<>();
+    public Scheduler(ArrayList<Task> a) {
+        accepted = a;
         hist = new ArrayList<>();
         lastID = -1;
         lastFinished = true;
@@ -30,16 +30,14 @@ public class Scheduler {
 
     public int schedule(int curTime) {
         // Return if work is being done or not
-        int retVal = 1;
-        if (accepted.size() == 0) {
-            retVal = 0;
-        }
+        int retVal = 0;
 
         // Check for missed deadlines
         for (int i = 0; i < accepted.size(); i++) {
             Task t = accepted.get(i);
             if ((t.getDeadline() + t.getArrivalTime()) - t.getCompTimeLeft() < curTime) {
                 accepted.remove(t);
+                retVal++;
                 i--;
                 hist.add(new History(curTime, t, History.Event.MISS));
             }

@@ -1,6 +1,7 @@
 package edu.iastate;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -10,11 +11,9 @@ public class Main {
 
     public static void main(String[] args){
         InputParser ip = new InputParser(new File("input.txt"));
-        Scheduler s = new Scheduler();
-        AsyncTaskServer server = new NoFilterServer(); // TODO Determine if async tasks should run with their own deadline or the deadline of the server
         List<Task> tasks = ip.parseInput();
 
-        runSchedule(s, server, tasks);
+        runSchedule(tasks);
 
         System.out.println("END SCHEDULE 1\n");
 /*
@@ -32,19 +31,34 @@ public class Main {
             System.out.println("Task " + t.getID() + ": " + String.format("%.3g", t.calcEnergyUsed(v, f)));*/
     }
 
-    private static void runSchedule(Scheduler s, AsyncTaskServer server, List<Task> tasks){
+    private static void runSchedule(List<Task> tasks){
+        ArrayList<Integer> admittedCount = new ArrayList<>();
+        ArrayList<Integer> missedCount = new ArrayList<>();
+        ArrayList<Task> accepted = new ArrayList<>();
+        Scheduler s = new Scheduler(accepted);
+        AsyncTaskServer server = new NoFilterServer();
         PIDController pid = new PIDController(0.5f, 0.1f, 0.1f, 0.95f);
-        AdmissionController controller = new AdmissionController(s, server);
-        float cpuUtil = 1;
-        float missRate = 0.05f;
+        AdmissionController controller = new AdmissionController(s, server, accepted);
+        float desiredCpuUtil = 1;
 
         for (int i = 0; i < MAX_TIME; i++) {
-            controller.admit(tasks, cpuUtil, i);
-
-            s.schedule(i);
+            admittedCount.add(controller.admit(tasks, desiredCpuUtil, i));
+            if(admittedCount.size() > 1000)
+                admittedCount.remove(0);
+            missedCount.add(s.schedule(i));
+            if(missedCount.size() > 1000)
+                missedCount.remove(0);
+            int totalMissed = 0;
+            int totalAdmitted = 0;
+            for(Integer k : missedCount){
+                totalMissed+=k;
+            }
+            for(Integer k : admittedCount){
+                totalAdmitted+=k;
+            }
 
             // Get CPU Utilization
-            cpuUtil -= pid.update(missRate);
+            desiredCpuUtil -= pid.update((1.0f*totalMissed)/totalAdmitted);
         }
 
         // Results
