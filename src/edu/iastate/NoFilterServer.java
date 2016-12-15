@@ -15,6 +15,11 @@ public class NoFilterServer extends AsyncTaskServer {
     }
 
     @Override
+    public boolean shouldRefresh(int curTime) {
+        return false;
+    }
+
+    @Override
     public List<Task> run(int curTime) {
         // Check for missed deadlines
         for (int i = 0; i < tasks.size(); i++) {
