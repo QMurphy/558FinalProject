@@ -9,34 +9,31 @@ import java.util.List;
 public class AdmissionController {
     private Scheduler s;
     private AsyncTaskServer server;
-    private List<Task> accepted;
 
-    public AdmissionController(Scheduler s, AsyncTaskServer server, List<Task> accepted) {
+    public AdmissionController(Scheduler s, AsyncTaskServer server) {
         this.s = s;
         this.server = server;
-        this.accepted = accepted;
     }
 
-    public int admit(List<Task> tasks, float cpuUtil, int curTime) {
-        // For now, just push everything through
+    public int admit(List<Task> tasks, float desiredCPUUtil, int curTime) {
+        // TODO Figure out which tasks best fit the utilization hole
         int admitted = 0;
+        float curCPUUtil = s.getCPUUtil();
+        float deltaCPUUtil = desiredCPUUtil - curCPUUtil;
         for (Task t : tasks) {
-            float curCPUUtil = 0;
-            for (Task t2 : accepted) {
-                curCPUUtil += t2.getCompTimeLeft() * 1.0f / (t2.getDeadline() - curTime);
-            }
-            float deltaCPUUtil = cpuUtil - curCPUUtil;
             if (deltaCPUUtil > 0) { // We can actually admit something, if not admit nothing
                 if (t.getSync() && curTime % t.getPeriod() == 0) {
                     t.setDeadline(curTime + t.getPeriod());
                     t.reset();
                     s.addTask(t);
                     admitted++;
+                    deltaCPUUtil -= t.getCompTime() / t.getPeriod();
                 }
                 if (!t.getSync() && t.getArrivalTime() == curTime) {
                     // Add async task to server
                     server.addTask(t);
                     admitted++;
+                    deltaCPUUtil -= t.getCompTime() / (t.getDeadline() - curTime);
                 }
             }
         }

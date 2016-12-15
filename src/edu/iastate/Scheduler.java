@@ -7,17 +7,18 @@ import java.util.List;
  * Created by qmurp on 12/4/2016.
  */
 public class Scheduler {
-    private float targetMissRate;
     private ArrayList<Task> accepted;
+    private ArrayList<Integer> utilHistory;
     private ArrayList<History> hist;
     private int lastID;
     private boolean lastFinished;
 
-    public Scheduler(ArrayList<Task> a) {
-        accepted = a;
+    public Scheduler() {
+        accepted = new ArrayList<>();
         hist = new ArrayList<>();
         lastID = -1;
         lastFinished = true;
+        utilHistory = new ArrayList<>();
     }
 
     public void addTask(Task t) {
@@ -30,14 +31,14 @@ public class Scheduler {
 
     public int schedule(int curTime) {
         // Return if work is being done or not
-        int retVal = 0;
+        int missedDeadlines = 0;
 
         // Check for missed deadlines
         for (int i = 0; i < accepted.size(); i++) {
             Task t = accepted.get(i);
-            if ((t.getDeadline() + t.getArrivalTime()) - t.getCompTimeLeft() < curTime) {
+            if ((t.getDeadline()) - t.getCompTimeLeft() < curTime) {
                 accepted.remove(t);
-                retVal++;
+                missedDeadlines++;
                 i--;
                 hist.add(new History(curTime, t, History.Event.MISS));
             }
@@ -72,12 +73,32 @@ public class Scheduler {
                 lastFinished = false;
             }
             lastID = scheduled.getID();
+
+            utilHistory.add(1);
+        }
+        else {
+            utilHistory.add(0);
+        }
+        if (utilHistory.size() > 50) {
+            utilHistory.remove(0);
         }
 
-        return retVal;
+        return missedDeadlines;
     }
 
     public List<History> getHistory() {
         return hist;
+    }
+
+    // TODO
+    public float getCPUUtil() {
+        if (utilHistory.size() == 0) {
+            return 0.0f;
+        }
+        int sum = 0;
+        for (Integer i : utilHistory) {
+            sum += i;
+        }
+        return (1.0f * sum) / utilHistory.size();
     }
 }

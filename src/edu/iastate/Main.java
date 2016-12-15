@@ -38,11 +38,11 @@ public class Main {
     private static Scheduler runSchedule(List<Task> tasks) {
         ArrayList<Integer> admittedCount = new ArrayList<>();
         ArrayList<Integer> missedCount = new ArrayList<>();
-        ArrayList<Task> accepted = new ArrayList<>();
-        Scheduler s = new Scheduler(accepted);
+        Scheduler s = new Scheduler();
         AsyncTaskServer server = new NoFilterServer();
-        PIDController pid = new PIDController(0.5f, 0.1f, 0.1f, 0.95f);
-        AdmissionController controller = new AdmissionController(s, server, accepted);
+        float desiredMissRatio = 0.2f;
+        PIDController pid = new PIDController(0.2f, 0.0f, 0.05f, desiredMissRatio);
+        AdmissionController controller = new AdmissionController(s, server);
         float desiredCpuUtil = 1;
 
         for (int i = 0; i < MAX_TIME; i++) {
@@ -62,14 +62,16 @@ public class Main {
             }
 
             // Get CPU Utilization
-            desiredCpuUtil -= pid.update((1.0f * totalMissed) / totalAdmitted);
+            desiredMissRatio -= pid.update((1.0f * totalMissed) / totalAdmitted);
+            desiredCpuUtil = 1.0f / (1.0f - desiredMissRatio);
+            System.out.println((1.0f * totalMissed) / totalAdmitted);
         }
 
 
         // Results
         List<History> hist = s.getHistory();
         for (History h : hist) {
-            System.out.println("Task " + h.task.getID() + ": " + History.eventToString(h.event) + " at time " + (h.time + 1));
+            //System.out.println("Task " + h.task.getID() + ": " + History.eventToString(h.event) + " at time " + (h.time + 1));
         }
         return s;
     }

@@ -17,9 +17,13 @@ public class PIDController {
         this.kd = kd;
         this.targetMissRate = targetMissRate;
         prevError = 0;
+        accError = 0;
     }
 
     float update(float actualMissRate) {
+        if (Float.isNaN(actualMissRate)) {
+            actualMissRate = 1.0f;
+        }
         float error = actualMissRate - targetMissRate;
         accError += error;
 
