@@ -20,6 +20,11 @@ public class AdmissionController {
         int admitted = 0;
         float curCPUUtil = s.getCPUUtil();
         float deltaCPUUtil = desiredCPUUtil - curCPUUtil;
+
+        if (server.shouldRefresh(curTime)) {
+            server.refresh();
+        }
+
         for (Task t : tasks) {
             if (deltaCPUUtil > 0) { // We can actually admit something, if not admit nothing
                 if (t.getSync() && curTime % t.getPeriod() == 0) {
@@ -32,20 +37,16 @@ public class AdmissionController {
                 if (!t.getSync() && t.getArrivalTime() == curTime) {
                     // Add async task to server
                     server.addTask(t);
-                    admitted++;
-                    deltaCPUUtil -= t.getCompTime() / (t.getDeadline() - curTime);
+                    if (server.canRun()) {
+                        List<Task> newAsyncTasks = server.run(curTime);
+                        s.addTasks(newAsyncTasks);
+                        admitted++;
+                        deltaCPUUtil -= t.getCompTime() / (t.getDeadline() - curTime);
+                    }
                 }
             }
         }
 
-        if (server.shouldRefresh(curTime)) {
-            server.refresh();
-        }
-
-        if (server.canRun()) {
-            List<Task> newAsyncTasks = server.run(curTime);
-            s.addTasks(newAsyncTasks);
-        }
         return admitted;
     }
 }

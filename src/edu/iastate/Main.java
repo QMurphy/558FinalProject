@@ -47,10 +47,10 @@ public class Main {
 
         for (int i = 0; i < MAX_TIME; i++) {
             admittedCount.add(controller.admit(tasks, desiredCpuUtil, i));
-            if (admittedCount.size() > 1000)
+            if (admittedCount.size() > 50)
                 admittedCount.remove(0);
             missedCount.add(s.schedule(i));
-            if (missedCount.size() > 1000)
+            if (missedCount.size() > 50)
                 missedCount.remove(0);
             int totalMissed = 0;
             int totalAdmitted = 0;

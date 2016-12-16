@@ -90,7 +90,6 @@ public class Scheduler {
         return hist;
     }
 
-    // TODO
     public float getCPUUtil() {
         if (utilHistory.size() == 0) {
             return 0.0f;
